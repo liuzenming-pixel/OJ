@@ -6,19 +6,39 @@ class Point
 {
 private:
     double xx, yy;
+    int id;
 
 public:
     static int sum;
-    static int tol;
-    Point() : xx(0), yy(0) { sum++; }
-    Point(double a, double b) : xx(a), yy(b) { sum++; }
+
+    Point() : xx(0), yy(0)
+    {
+        // id=++sum;
+        sum++;
+        id = sum;
+    }
+    Point(double a, double b) : xx(a), yy(b)
+    {
+        sum++;
+        id = sum;
+    }
+    Point(const Point &p) : xx(p.xx), yy(p.yy)
+    {
+        sum++;
+        id = sum;
+    }
+    // ~Point()
+    // {
+    //     tol--;
+    // }
 
     void show() const
     {
-        cout << "Point[" << sum << "] : (" << xx << ", " << yy << ")" << endl;
+        cout << "Point[" << id << "] : (" << setprecision(16) << xx << ", " << yy << ")" << endl;
     }
     void showSumOfPoint() const
     {
+        cout << "In total : " << sum << " points." << endl;
     }
 
     double x() const
@@ -39,7 +59,7 @@ public:
         yy = a;
         return yy;
     }
-    Point setPoint(double a, double b)
+    Point &setPoint(double a, double b)
     {
         xx = a;
         yy = b;
@@ -53,42 +73,36 @@ public:
             return false;
     }
 
-    Point copy(const Point &p)
+    Point &copy(const Point &p)
     {
         xx = p.xx;
         yy = p.yy;
         return *this;
     }
 
-    Point inverse()
+    Point &inverse()
     {
         double temp = xx;
         xx = yy;
         yy = temp;
         return *this;
     }
-    Point inverse(Point p)
+    Point &inverse(const Point &p)
     {
-        double temp = p.xx;
-        p.xx = p.yy;
-        p.yy = temp;
-        return p;
+        xx = p.yy;
+        yy = p.xx;
+        return *this;
     }
 };
 int Point::sum = 0;
-int Point::tol = 0;
 
 void ShowPoint(double a, double b)
 {
-    cout << "Point[" << Point::sum << "] : (" << a << ", " << b << ")" << endl;
-}
-void ShowPoint(Point p)
-{
-    cout << "Point[" << Point::sum << "] : (" << p.x() << ", " << p.y() << ")" << endl;
+    cout << "Point : (" << setprecision(16) << a << ", " << b << ")" << endl;
 }
 void ShowPoint(const Point &p)
 {
-    cout << "Point[" << Point::sum << "] : (" << p.x() << ", " << p.y() << ")" << endl;
+    cout << "Point : (" << setprecision(16) << p.x() << ", " << p.y() << ")" << endl;
 }
 
 int main()
@@ -101,10 +115,13 @@ int main()
     {
         if (a == b)
             p.copy(pt[l].setPoint(a, b));
+        // 2
         if (a > b)
             p.copy(pt[l].setPoint(a, b).inverse());
+        // 3
         if (a < b)
             p.inverse(pt[l].setPoint(a, b));
+        // 1
         if (a < 0)
             q.copy(p).inverse();
         if (b < 0)
