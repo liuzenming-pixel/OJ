@@ -1,74 +1,24 @@
 #include <iostream>
-#include <iomanip>
 using namespace std;
-
+#include <iomanip>
 class Time
 {
 private:
     int h, m, s;
 
 public:
-    Time() : h(0), m(0), s(0) {}
-    Time(int hh, int mm, int ss) : h(hh), m(mm), s(ss) {}
-    Time(const Time &a) : h(a.h), m(a.m), s(a.s)
-    {
-        // cout << "There was a call to the copy constructor : " << h << ',' << m << ',' << s << endl;
-    }
-    Time getTime()
-    {
-        return *this;
-    }
-    Time inputTime()
-    {
-        int hh, mm, ss;
-        cin >> hh >> mm >> ss;
-        h = hh;
-        m = mm;
-        s = ss;
-        return *this;
-    }
-    Time &setTime(int a, int b, int c)
-    {
-        h = a;
-        m = b;
-        s = c;
-        return *this;
-    }
-    Time &setTime(Time &t)
-    {
-        h = t.h;
-        m = t.m;
-        s = t.s;
-        return *this;
-    }
-    int panduan()
-    {
-        // 合法返回1，不合法返回0
-        return (s >= 0 && s < 60) && (m >= 0 && m < 60) && (h >= 0 && h < 24);
-    }
-    void showTime()
-    {
-        if (panduan())
-        {
-            cout << setfill('0') << setw(2) << h;
-            cout << ":";
-            cout << setfill('0') << setw(2) << m;
-            cout << ":";
-            cout << setfill('0') << setw(2) << s;
-            cout << endl;
-        }
-        else
-            cout << "Time error" << endl;
-    }
-    int hour()
+    Time(int a=0, int b=0, int c=0) : h(a), m(b), s(c) {}
+    Time(const Time &t) : h(t.h), m(t.m), s(t.s) {}
+
+    int hour()const
     {
         return h;
     }
-    int minute()
+    int minute()const
     {
         return m;
     }
-    int second()
+    int second()const
     {
         return s;
     }
@@ -84,12 +34,61 @@ public:
     {
         s = t;
     }
+    Time &setTime(int a, int b, int c)
+    {
+        h = a;
+        m = b;
+        s = c;
+        return *this;
+    }
+    Time &setTime(const Time &t)
+    {
+        h = t.h;
+        m = t.m;
+        s = t.s;
+        return *this;
+    }
+    const Time &getTime()const
+    {
+        return *this;
+    }
+    Time inputTime()
+    {
+        cin >> h >> m >> s;
+        return *this;
+    }
+    int panduan()const
+    {
+        // 合法返回1，不合法返回0
+        return (s >= 0 && s < 60) && (m >= 0 && m < 60) && (h >= 0 && h < 24);
+    }
+    void showTime()const
+    {
+        if (panduan())
+        {
+            cout << setw(2) << setfill('0') << h << ":" << setw(2) << m << ":" << setw(2) << s << endl;
+        }
+        else
+        {
+            cout << "Time error" << endl;
+        }
+    }
 };
 
 // ================================AppendCode================================
-
 int main()
 {
+    cout << "Constant test output :" << endl;
+    const Time c;
+    const Time cc(1, 2, 3);
+    const Time ccc(23, 60, 60);
+    cout << setw(2) << setfill('0') << c.hour() << ":";
+    cout << setw(2) << setfill('0') << c.minute() << ":";
+    cout << setw(2) << setfill('0') << c.second() << endl;
+    cc.getTime().showTime();
+    ccc.showTime();
+
+    cout << "\nTest data output :" << endl;
     Time t;
     int cases;
     cin >> cases;
